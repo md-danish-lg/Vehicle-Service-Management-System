@@ -23,7 +23,7 @@ public class WorkOrder {
     @Enumerated(EnumType.STRING)
     private WorkOrderStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String notes;
 
     @Column(nullable = false)

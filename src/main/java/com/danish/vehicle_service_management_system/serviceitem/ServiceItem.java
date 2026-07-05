@@ -22,7 +22,7 @@ public class ServiceItem {
     private Float laborCost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workOrder_id", nullable = false)
+    @JoinColumn(name = "work_order_id", nullable = false)
     @JsonIgnore
     private WorkOrder workOrder;
 
