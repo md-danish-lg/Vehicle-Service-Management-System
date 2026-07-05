@@ -25,14 +25,14 @@ public class Vehicle {
     private String model;
 
     @Column(nullable = false)
-    private int year;
+    private Integer year;
 
     private String licensePlate;
 
-    private int mileage;
+    private Integer mileage;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", nullable = false)
     @JsonIgnore
     private Customer customer;
@@ -46,7 +46,7 @@ public class Vehicle {
     }
 
 
-    public Vehicle(Long id, String make, String model, int year, String licensePlate, int mileage, Customer customer, List<WorkOrder> workOrderList) {
+    public Vehicle(Long id, String make, String model, Integer year, String licensePlate, Integer mileage, Customer customer, List<WorkOrder> workOrderList) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -125,7 +125,7 @@ public class Vehicle {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Vehicle vehicle = (Vehicle) o;
-        return year == vehicle.year && mileage == vehicle.mileage && Objects.equals(id, vehicle.id) && Objects.equals(make, vehicle.make) && Objects.equals(model, vehicle.model) && Objects.equals(licensePlate, vehicle.licensePlate);
+        return Objects.equals(id, vehicle.id) && Objects.equals(make, vehicle.make) && Objects.equals(model, vehicle.model) && Objects.equals(year, vehicle.year) && Objects.equals(licensePlate, vehicle.licensePlate) && Objects.equals(mileage, vehicle.mileage);
     }
 
     @Override
