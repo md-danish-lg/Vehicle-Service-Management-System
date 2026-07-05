@@ -2,9 +2,11 @@ package com.danish.vehicle_service_management_system.vehicle;
 
 
 import com.danish.vehicle_service_management_system.customer.Customer;
+import com.danish.vehicle_service_management_system.workorder.WorkOrder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -35,11 +37,16 @@ public class Vehicle {
     @JsonIgnore
     private Customer customer;
 
+
+    @OneToMany(mappedBy = "vehicle")
+    @JsonIgnore
+    private List<WorkOrder> workOrderList;
+
     public Vehicle() {
     }
 
 
-    public Vehicle(Long id, String make, String model, int year, String licensePlate, int mileage, Customer customer) {
+    public Vehicle(Long id, String make, String model, int year, String licensePlate, int mileage, Customer customer, List<WorkOrder> workOrderList) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -47,6 +54,7 @@ public class Vehicle {
         this.licensePlate = licensePlate;
         this.mileage = mileage;
         this.customer = customer;
+        this.workOrderList = workOrderList;
     }
 
     public Long getId() {
@@ -103,6 +111,14 @@ public class Vehicle {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<WorkOrder> getWorkOrderList() {
+        return workOrderList;
+    }
+
+    public void setWorkOrderList(List<WorkOrder> workOrderList) {
+        this.workOrderList = workOrderList;
     }
 
     @Override
