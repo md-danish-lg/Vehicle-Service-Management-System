@@ -20,7 +20,8 @@ public class WorkOrder {
     private Long id;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private WorkOrderStatus status;
 
     @Column(nullable = false)
     private String notes;
@@ -59,7 +60,7 @@ public class WorkOrder {
     public WorkOrder() {
     }
 
-    public WorkOrder(Long id, String status, String notes, LocalDateTime createdAt, LocalDateTime completedAt, Vehicle vehicle, Mechanic mechanic, List<ServiceItem> serviceItemList) {
+    public WorkOrder(Long id, WorkOrderStatus status, String notes, LocalDateTime createdAt, LocalDateTime completedAt, Vehicle vehicle, Mechanic mechanic, List<ServiceItem> serviceItemList) {
         this.id = id;
         this.status = status;
         this.notes = notes;
@@ -78,11 +79,11 @@ public class WorkOrder {
         this.id = id;
     }
 
-    public String getStatus() {
+    public WorkOrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(WorkOrderStatus status) {
         this.status = status;
     }
 
