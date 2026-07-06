@@ -2,6 +2,7 @@ package com.danish.vehicle_service_management_system.customer;
 
 import com.danish.vehicle_service_management_system.vehicle.Vehicle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class Customer {
     private String email;
 
     @OneToMany(mappedBy = "customer")
-    @JsonIgnore
+    @JsonManagedReference
     private List<Vehicle> vehicle;
 
 

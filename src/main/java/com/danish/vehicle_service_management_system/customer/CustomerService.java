@@ -1,9 +1,11 @@
 package com.danish.vehicle_service_management_system.customer;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -21,5 +23,11 @@ public class CustomerService {
 
     public void addCustomer(Customer customer) {
         customerRepository.save(customer);
+    }
+
+    public Customer FindCustomerWithVehicles(Long id) {
+        return customerRepository.findWithVehiclesById(id).orElseThrow(() ->
+                new CustomerNotFoundException(id));
+
     }
 }

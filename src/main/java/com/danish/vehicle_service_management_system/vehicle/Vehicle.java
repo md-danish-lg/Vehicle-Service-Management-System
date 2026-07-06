@@ -3,6 +3,7 @@ package com.danish.vehicle_service_management_system.vehicle;
 
 import com.danish.vehicle_service_management_system.customer.Customer;
 import com.danish.vehicle_service_management_system.workorder.WorkOrder;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -34,7 +35,7 @@ public class Vehicle {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="customer_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private Customer customer;
 
 
