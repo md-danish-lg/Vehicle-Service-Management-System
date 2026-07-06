@@ -1,5 +1,6 @@
 package com.danish.vehicle_service_management_system.mechanic;
 
+import com.danish.vehicle_service_management_system.workorder.WorkOrder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,11 @@ public class MechanicController {
     public ResponseEntity<String> addMechanic(@RequestBody Mechanic mechanic){
         mechanicService.saveMechanic(mechanic);
         return ResponseEntity.ok("Mechanic Saved Successfully!");
+    }
+
+    @GetMapping("{id}/workorders")
+    public List<WorkOrder> getAllWorkOrdersById(@PathVariable Long id){
+        return mechanicService.getWorkOrdersByMechanicId(id);
     }
 
 }

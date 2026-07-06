@@ -1,6 +1,7 @@
 package com.danish.vehicle_service_management_system.mechanic;
 
 
+import com.danish.vehicle_service_management_system.workorder.WorkOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,13 @@ public class MechanicService {
 
     public void saveMechanic(Mechanic mechanic) {
         mechanicRepository.save(mechanic);
+    }
+
+    public List<WorkOrder> getWorkOrdersByMechanicId(Long id) {
+        if(!(mechanicRepository.existsById(id))){
+            throw new MechanicNotFoundException(id);
+        }
+
     }
 }
 
