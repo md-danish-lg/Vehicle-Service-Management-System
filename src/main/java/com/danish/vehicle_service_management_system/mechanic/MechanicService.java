@@ -2,6 +2,8 @@ package com.danish.vehicle_service_management_system.mechanic;
 
 
 import com.danish.vehicle_service_management_system.workorder.WorkOrder;
+import com.danish.vehicle_service_management_system.workorder.WorkOrderRepository;
+import com.danish.vehicle_service_management_system.workorder.WorkOrderStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +12,12 @@ import java.util.List;
 public class MechanicService {
 
     private final MechanicRepository mechanicRepository;
+    private final WorkOrderRepository workOrderRepository;
 
 
-    public MechanicService(MechanicRepository mechanicRepository) {
+    public MechanicService(MechanicRepository mechanicRepository, WorkOrderRepository workOrderRepository) {
         this.mechanicRepository = mechanicRepository;
+        this.workOrderRepository = workOrderRepository;
     }
 
 
@@ -26,9 +30,12 @@ public class MechanicService {
     }
 
     public List<WorkOrder> getWorkOrdersByMechanicId(Long id) {
-        if(!(mechanicRepository.existsById(id))){
-            throw new MechanicNotFoundException(id);
-        }
+
+        Mechanic mechanic = mechanicRepository.findById(id).orElseThrow(
+                ()->new MechanicNotFoundException(id));
+
+
+        return workOrderRepository.findWorkOrdersByMechanicAndStatusNot(mechanic, WorkOrderStatus.COMPLETED);
 
     }
 }
