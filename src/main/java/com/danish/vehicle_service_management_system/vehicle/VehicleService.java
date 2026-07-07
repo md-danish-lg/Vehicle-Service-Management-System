@@ -4,17 +4,23 @@ package com.danish.vehicle_service_management_system.vehicle;
 import com.danish.vehicle_service_management_system.customer.Customer;
 import com.danish.vehicle_service_management_system.customer.CustomerNotFoundException;
 import com.danish.vehicle_service_management_system.customer.CustomerRepository;
+import com.danish.vehicle_service_management_system.workorder.WorkOrder;
+import com.danish.vehicle_service_management_system.workorder.WorkOrderRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
     private final CustomerRepository customerRepository;
+    private final WorkOrderRepository workOrderRepository;
 
-    public VehicleService(VehicleRepository vehicleRepository, CustomerRepository customerRepository) {
+    public VehicleService(VehicleRepository vehicleRepository, CustomerRepository customerRepository, WorkOrderRepository workOrderRepository) {
         this.vehicleRepository = vehicleRepository;
         this.customerRepository = customerRepository;
+        this.workOrderRepository = workOrderRepository;
     }
 
     public void addVehicle(VehicleRequestDTO dto) {
@@ -41,4 +47,9 @@ public class VehicleService {
     public Vehicle findVehicleById(Long id) {
         return vehicleRepository.findById(id).orElseThrow(()->new VehicleNotFoundException(id));
     }
+
+    public List<WorkOrder> getWorkOrdersById(Long id) {
+        return workOrderRepository.findWorkOrdersByVehicle_Id(id);
+    }
+
 }

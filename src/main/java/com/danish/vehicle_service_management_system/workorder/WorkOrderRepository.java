@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
     List<WorkOrder> findWorkOrdersByMechanicAndStatusNot(Mechanic mechanic, WorkOrderStatus status);
+
+    List<WorkOrder> findWorkOrdersByVehicle_Id(Long id);
 }
