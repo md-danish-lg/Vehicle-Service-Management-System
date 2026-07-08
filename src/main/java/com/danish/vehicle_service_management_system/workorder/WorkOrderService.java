@@ -63,4 +63,19 @@ public class WorkOrderService {
 
         workOrderRepository.save(workOrder);
     }
+
+    public void startWorkOrder(Long id) {
+        WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow(()->
+                new WorkOrderNotFoundException(id));
+
+        if(workOrder.getStatus() == WorkOrderStatus.ASSIGNED){
+            workOrder.setStatus(WorkOrderStatus.IN_PROGRESS);
+        }else{
+            throw new InvalidWorkOrderStateException("Invalid Transition, Must be assigned then moved to in Progress");
+        }
+
+        workOrderRepository.save(workOrder);
+
+
+    }
 }

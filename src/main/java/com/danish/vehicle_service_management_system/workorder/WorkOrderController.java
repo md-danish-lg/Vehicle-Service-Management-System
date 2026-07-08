@@ -39,4 +39,11 @@ public class WorkOrderController {
 
 
     }
+
+    @PatchMapping("{id}/start")
+    public ResponseEntity<String> startWorking(@PathVariable Long id){
+        workOrderService.startWorkOrder(id);
+        return ResponseEntity.ok("Work Order status moved to In Progress");
+    }
+
 }
