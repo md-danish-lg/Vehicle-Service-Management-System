@@ -28,4 +28,15 @@ public class WorkOrderController {
         return workOrderService.getWorkOrderWithServiceItems(id);
 
     }
+
+
+    @PatchMapping("{id}/assign")
+    public ResponseEntity<String> assignMechanicToWorkOrder(@PathVariable Long id, @Valid @RequestBody WorkOrderPatchDTO dto){
+        workOrderService.assignMechanic(id, dto);
+        return ResponseEntity.ok("Mechanic assigned Successfully!");
+
+
+
+
+    }
 }
