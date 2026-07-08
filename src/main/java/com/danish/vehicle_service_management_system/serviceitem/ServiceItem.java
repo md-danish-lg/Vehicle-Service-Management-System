@@ -2,6 +2,7 @@ package com.danish.vehicle_service_management_system.serviceitem;
 
 
 import com.danish.vehicle_service_management_system.workorder.WorkOrder;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -23,7 +24,7 @@ public class ServiceItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "work_order_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private WorkOrder workOrder;
 
 

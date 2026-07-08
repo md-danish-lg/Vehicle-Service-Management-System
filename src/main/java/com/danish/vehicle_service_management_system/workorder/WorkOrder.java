@@ -5,6 +5,7 @@ import com.danish.vehicle_service_management_system.mechanic.Mechanic;
 import com.danish.vehicle_service_management_system.serviceitem.ServiceItem;
 import com.danish.vehicle_service_management_system.vehicle.Vehicle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -47,7 +48,7 @@ public class WorkOrder {
 
 
     @OneToMany(mappedBy = "workOrder")
-    @JsonIgnore
+    @JsonManagedReference
     private List<ServiceItem> serviceItemList;
 
 

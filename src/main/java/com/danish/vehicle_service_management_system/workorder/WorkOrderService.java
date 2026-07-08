@@ -34,4 +34,9 @@ public class WorkOrderService {
 
 
     }
+
+    public WorkOrder getWorkOrderWithServiceItems(Long id) {
+        return workOrderRepository.findWithServiceItemsById(id).orElseThrow(()->
+                new WorkOrderNotFoundException(id));
+    }
 }
