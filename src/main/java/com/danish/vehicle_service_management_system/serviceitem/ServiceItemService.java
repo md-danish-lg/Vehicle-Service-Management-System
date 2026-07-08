@@ -1,8 +1,6 @@
 package com.danish.vehicle_service_management_system.serviceitem;
 
-import com.danish.vehicle_service_management_system.workorder.WorkOrder;
-import com.danish.vehicle_service_management_system.workorder.WorkOrderNotFoundException;
-import com.danish.vehicle_service_management_system.workorder.WorkOrderRepository;
+import com.danish.vehicle_service_management_system.workorder.*;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +18,11 @@ public class ServiceItemService {
 
     public void addNewServiceItem(Long id, @Valid ServiceItemRequestDTO dto) {
         WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow(()->new WorkOrderNotFoundException(id));
+
+
+        if(workOrder.getStatus() == WorkOrderStatus.COMPLETED){
+            throw new InvalidWorkOrderStateException("Cannot add services to a completed work order");
+        }
 
         ServiceItem serviceItem = new ServiceItem();
 
