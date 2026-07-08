@@ -30,7 +30,7 @@ public class CustomerController {
     }
 
     @GetMapping("{id}")
-    public Customer getCustomerWithVehicles(@PathVariable Long id){
+    public CustomerWithVehiclesDTO getCustomerWithVehicles(@PathVariable Long id){
         return customerService.FindCustomerWithVehicles(id);
     }
 

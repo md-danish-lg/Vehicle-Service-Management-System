@@ -25,9 +25,10 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public Customer FindCustomerWithVehicles(Long id) {
-        return customerRepository.findWithVehiclesById(id).orElseThrow(() ->
+    public CustomerWithVehiclesDTO FindCustomerWithVehicles(Long id) {
+        Customer customer =  customerRepository.findWithVehiclesById(id).orElseThrow(() ->
                 new CustomerNotFoundException(id));
 
+        return new CustomerWithVehiclesDTO(customer);
     }
 }

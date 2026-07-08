@@ -28,7 +28,7 @@ public class Customer {
     private String email;
 
     @OneToMany(mappedBy = "customer")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Vehicle> vehicle;
 
 
@@ -73,6 +73,14 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Vehicle> getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(List<Vehicle> vehicle) {
+        this.vehicle = vehicle;
     }
 
     @Override
