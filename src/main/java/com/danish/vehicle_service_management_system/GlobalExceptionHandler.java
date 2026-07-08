@@ -1,8 +1,9 @@
 package com.danish.vehicle_service_management_system;
 
 
-import com.danish.vehicle_service_management_system.customer.Customer;
 import com.danish.vehicle_service_management_system.customer.CustomerNotFoundException;
+import com.danish.vehicle_service_management_system.mechanic.MechanicNotFoundException;
+import com.danish.vehicle_service_management_system.workorder.WorkOrderNotFoundException;
 import com.danish.vehicle_service_management_system.vehicle.VehicleNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,4 +23,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCustomerNotFound(CustomerNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+    @ExceptionHandler(WorkOrderNotFoundException.class)
+    public ResponseEntity<String> handleWorkOrderNotFound(WorkOrderNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MechanicNotFoundException.class)
+    public ResponseEntity<String> handleMechanicNotFound(MechanicNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
 }
