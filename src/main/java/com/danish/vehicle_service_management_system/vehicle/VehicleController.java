@@ -12,9 +12,11 @@ import java.util.List;
 public class VehicleController {
 
     private final VehicleService vehicleService;
+    private final AiService aiService;
 
-    public VehicleController(VehicleService vehicleService) {
+    public VehicleController(VehicleService vehicleService, AiService aiService) {
         this.vehicleService = vehicleService;
+        this.aiService = aiService;
     }
 
     @PostMapping
@@ -33,5 +35,14 @@ public class VehicleController {
     public List<WorkOrder> getAllWorkOrders(@PathVariable Long id){
         return vehicleService.getWorkOrdersById(id);
     }
+
+
+    @GetMapping("{id}/summary")
+    public ResponseEntity<String> summarizeWorkHistory(@PathVariable Long id){
+
+        String summary = aiService.summarize(id);
+        return ResponseEntity.ok(summary);
+    }
+
 
 }

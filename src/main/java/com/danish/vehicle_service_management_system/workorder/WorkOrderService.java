@@ -7,14 +7,14 @@ import com.danish.vehicle_service_management_system.mechanic.MechanicRepository;
 import com.danish.vehicle_service_management_system.serviceitem.NotEnoughItemsException;
 import com.danish.vehicle_service_management_system.serviceitem.ServiceItem;
 import com.danish.vehicle_service_management_system.serviceitem.ServiceItemRepository;
-import com.danish.vehicle_service_management_system.vehicle.Vehicle;
-import com.danish.vehicle_service_management_system.vehicle.VehicleNotFoundException;
-import com.danish.vehicle_service_management_system.vehicle.VehicleRepository;
+import com.danish.vehicle_service_management_system.vehicle.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkOrderService {
@@ -22,12 +22,14 @@ public class WorkOrderService {
     private final WorkOrderRepository workOrderRepository;
     private final MechanicRepository mechanicRepository;
     private final ServiceItemRepository serviceItemRepository;
+    private final AiService aiService;
 
-    public WorkOrderService(VehicleRepository vehicleRepository, WorkOrderRepository workOrderRepository, MechanicRepository mechanicRepository, ServiceItemRepository serviceItemRepository) {
+    public WorkOrderService(VehicleRepository vehicleRepository, WorkOrderRepository workOrderRepository, MechanicRepository mechanicRepository, ServiceItemRepository serviceItemRepository, AiService aiService) {
         this.vehicleRepository = vehicleRepository;
         this.workOrderRepository = workOrderRepository;
         this.mechanicRepository = mechanicRepository;
         this.serviceItemRepository = serviceItemRepository;
+        this.aiService = aiService;
     }
 
     public void addNewWorkOrder(@Valid WorkOrderRequestDTO dto) {
@@ -87,6 +89,7 @@ public class WorkOrderService {
 
     }
 
+    @Transactional
     public void completeWorkOrder(Long id) {
         WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow(()->
                 new WorkOrderNotFoundException(id));
@@ -94,10 +97,27 @@ public class WorkOrderService {
         List<ServiceItem> serviceItems = serviceItemRepository.getServiceItemsByWorkOrder(workOrder);
 
 
+
+
         if(workOrder.getStatus() == WorkOrderStatus.IN_PROGRESS){
             if (!(serviceItems.isEmpty())){
                 workOrder.setStatus(WorkOrderStatus.COMPLETED);
                 workOrder.setCompletedAt(LocalDateTime.now());
+
+                Vehicle vehicle = workOrder.getVehicle();
+                String text = vehicle.getMake() + " " + vehicle.getModel() + " " + vehicle.getYear() + " - " +
+                        serviceItems.stream().map(ServiceItem::getDescription)
+                                .collect(Collectors.joining(", "));
+
+                RepairRecordDTO dto = new RepairRecordDTO();
+
+                dto.setText(text);
+                dto.setId(String.valueOf(workOrder.getId()));
+                dto.setVehicleId(vehicle.getId());
+
+                aiService.addRepairRecord(dto);
+
+
             }else{
                 throw new NotEnoughItemsException();
             }
