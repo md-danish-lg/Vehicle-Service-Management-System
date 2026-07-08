@@ -46,4 +46,10 @@ public class WorkOrderController {
         return ResponseEntity.ok("Work Order status moved to In Progress");
     }
 
+    @PatchMapping("{id}/complete")
+    public ResponseEntity<String> finishWorkOrder(@PathVariable Long id){
+        workOrderService.completeWorkOrder(id);
+        return ResponseEntity.ok("Work Order Completed!");
+    }
+
 }
