@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -130,6 +131,7 @@ class WorkOrderServiceTest {
 
         underTest.assignMechanic(id, dto);
         verify(workOrderRepository).save(workOrder);
+        assertThat(workOrder.getStatus()).isEqualTo(WorkOrderStatus.ASSIGNED);
 
     }
 
@@ -144,6 +146,7 @@ class WorkOrderServiceTest {
         underTest.startWorkOrder(id);
 
         verify(workOrderRepository).save(workOrder);
+        assertThat(workOrder.getStatus()).isEqualTo(WorkOrderStatus.IN_PROGRESS);
 
 
     }
