@@ -5,10 +5,7 @@ import com.danish.vehicle_service_management_system.mechanic.MechanicRepository;
 import com.danish.vehicle_service_management_system.serviceitem.NotEnoughItemsException;
 import com.danish.vehicle_service_management_system.serviceitem.ServiceItem;
 import com.danish.vehicle_service_management_system.serviceitem.ServiceItemRepository;
-import com.danish.vehicle_service_management_system.vehicle.AiService;
-import com.danish.vehicle_service_management_system.vehicle.RepairRecordDTO;
-import com.danish.vehicle_service_management_system.vehicle.Vehicle;
-import com.danish.vehicle_service_management_system.vehicle.VehicleRepository;
+import com.danish.vehicle_service_management_system.vehicle.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -180,5 +177,27 @@ class WorkOrderServiceTest {
 
 
 
+    }
+
+    @Test
+    void throwsVehicleNotFound(){
+        Long id = 1L;
+        WorkOrderRequestDTO dto = new WorkOrderRequestDTO();
+        dto.setVehicleId(id);
+        dto.setNotes("HI");
+
+        when(vehicleRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(()->underTest.addNewWorkOrder(dto))
+                .isInstanceOf(VehicleNotFoundException.class);
+    }
+
+    @Test
+    void throwsWhenWorkOrderNotFound(){
+        Long id = 1L;
+        when(workOrderRepository.findWithServiceItemsById(id)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(()->underTest.getWorkOrderWithServiceItems(id))
+                .isInstanceOf(WorkOrderNotFoundException.class);
     }
 }
