@@ -6,6 +6,8 @@ import com.danish.vehicle_service_management_system.serviceitem.NotEnoughItemsEx
 import com.danish.vehicle_service_management_system.serviceitem.ServiceItem;
 import com.danish.vehicle_service_management_system.serviceitem.ServiceItemRepository;
 import com.danish.vehicle_service_management_system.vehicle.AiService;
+import com.danish.vehicle_service_management_system.vehicle.RepairRecordDTO;
+import com.danish.vehicle_service_management_system.vehicle.Vehicle;
 import com.danish.vehicle_service_management_system.vehicle.VehicleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.OPTIONAL;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -91,7 +94,6 @@ class WorkOrderServiceTest {
         Long id = 1L;
         WorkOrder workOrder = new WorkOrder();
 
-
         when(workOrderRepository.findById(id)).thenReturn(Optional.of(workOrder));
 
         workOrder.setStatus(WorkOrderStatus.CREATED);
@@ -107,8 +109,6 @@ class WorkOrderServiceTest {
     void throwsWhenNoServiceItems(){
         Long id = 1L;
         WorkOrder workOrder = new WorkOrder();
-
-
 
         when(workOrderRepository.findById(id)).thenReturn(Optional.of(workOrder));
 
@@ -139,4 +139,46 @@ class WorkOrderServiceTest {
 
     }
 
+    @Test
+    void startOrderCorrectly(){
+        Long id = 1L;
+        WorkOrder workOrder = new WorkOrder();
+
+        when(workOrderRepository.findById(id)).thenReturn(Optional.of(workOrder));
+
+        workOrder.setStatus(WorkOrderStatus.ASSIGNED);
+        underTest.startWorkOrder(id);
+
+        verify(workOrderRepository).save(workOrder);
+
+
+    }
+
+
+    @Test
+    void completeWorkOrderCorrectly(){
+        Long id = 1L;
+        WorkOrder workOrder = new WorkOrder();
+        List<ServiceItem> serviceItems = List.of(
+                new ServiceItem(),
+                new ServiceItem()
+        );
+
+
+        when(workOrderRepository.findById(id)).thenReturn(Optional.of(workOrder));
+
+        workOrder.setStatus(WorkOrderStatus.IN_PROGRESS);
+        when(serviceItemRepository.getServiceItemsByWorkOrder(workOrder)).thenReturn(serviceItems);
+
+        workOrder.setVehicle(new Vehicle());
+
+        underTest.completeWorkOrder(id);
+
+
+        verify(aiService).addRepairRecord(any(RepairRecordDTO.class));
+        verify(workOrderRepository).save(workOrder);
+
+
+
+    }
 }
