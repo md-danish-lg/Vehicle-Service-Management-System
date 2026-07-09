@@ -2,6 +2,7 @@ package com.danish.vehicle_service_management_system.vehicle;
 
 
 import com.danish.vehicle_service_management_system.workorder.WorkOrder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,7 +14,8 @@ import java.util.Map;
 public class AiService {
 
     private final RestTemplate restTemplate;
-    private final String vehicleServiceUrl = "http://localhost:8000";
+    @Value("${ai.service.url}")
+    private String vehicleServiceUrl;
 
 
     public AiService(RestTemplate restTemplate) {

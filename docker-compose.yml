@@ -1,22 +1,53 @@
+version: '3.8'
+
 services:
-  db:
-    container_name: vehicle-service-db
-    image: postgres:latest
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
     environment:
       POSTGRES_USER: danish
       POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
-    volumes:
-      - db:/data/postgres
+      POSTGRES_DB: vehicleservicedb
     ports:
       - "5332:5432"
-    networks:
-      - db
-    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-networks:
-  db:
-    driver: bridge
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  fastapi:
+    build:
+      context: E:\Projects\vehicle-ai-service
+    container_name: fastapi-ai
+    ports:
+      - "8000:8000"
+    env_file:
+      - E:\Projects\vehicle-ai-service/.env
+    depends_on:
+      - chromadb
+
+  springboot:
+    build:
+      context: E:\Projects\Vehicle Service Management System
+    container_name: vehicle-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vehicleservicedb
+      SPRING_DATASOURCE_USERNAME: danish
+      SPRING_DATASOURCE_PASSWORD: password
+      AI_SERVICE_URL: http://fastapi-ai:8000
+    depends_on:
+      - postgres
+      - fastapi
 
 volumes:
-  db:
+  postgres_data:
+  chroma_data:
