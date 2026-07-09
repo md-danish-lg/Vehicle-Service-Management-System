@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.OPTIONAL;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -120,5 +121,22 @@ class WorkOrderServiceTest {
 
     }
 
+    @Test
+    void assignsMechanicCorrectly(){
+        Long id = 1L;
+        WorkOrder workOrder = new WorkOrder();
+        Mechanic mechanic = new Mechanic();
+        WorkOrderPatchDTO dto = new WorkOrderPatchDTO();
+        dto.setMechanicId(id);
+
+        when(workOrderRepository.findById(id)).thenReturn(Optional.of(workOrder));
+        when(mechanicRepository.findById(id)).thenReturn(Optional.of(mechanic));
+
+        workOrder.setStatus(WorkOrderStatus.CREATED);
+
+        underTest.assignMechanic(id, dto);
+        verify(workOrderRepository).save(workOrder);
+
+    }
 
 }
