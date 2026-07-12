@@ -50,7 +50,7 @@ public class VehicleService {
     }
     @Cacheable(value="vehicleHistory", key = "#id")
     public List<WorkOrder> getWorkOrdersById(Long id) {
-        return workOrderRepository.findWorkOrdersByVehicle_Id(id);
+        return workOrderRepository.findByVehicleId(id);
     }
 
 }

@@ -5,12 +5,13 @@ import com.danish.vehicle_service_management_system.workorder.WorkOrder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name="mechanic")
-public class Mechanic {
+public class Mechanic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
