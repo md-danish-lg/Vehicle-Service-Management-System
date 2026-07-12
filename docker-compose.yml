@@ -33,6 +33,14 @@ services:
     depends_on:
       - chromadb
 
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+
   springboot:
     build:
       context: E:\Projects\Vehicle Service Management System
@@ -44,9 +52,12 @@ services:
       SPRING_DATASOURCE_USERNAME: danish
       SPRING_DATASOURCE_PASSWORD: password
       AI_SERVICE_URL: http://fastapi-ai:8000
+      REDIS_HOST: redis
     depends_on:
       - postgres
       - fastapi
+      - redis
+
 
 volumes:
   postgres_data:

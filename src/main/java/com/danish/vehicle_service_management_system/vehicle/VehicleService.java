@@ -6,6 +6,7 @@ import com.danish.vehicle_service_management_system.customer.CustomerNotFoundExc
 import com.danish.vehicle_service_management_system.customer.CustomerRepository;
 import com.danish.vehicle_service_management_system.workorder.WorkOrder;
 import com.danish.vehicle_service_management_system.workorder.WorkOrderRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class VehicleService {
     public Vehicle findVehicleById(Long id) {
         return vehicleRepository.findById(id).orElseThrow(()->new VehicleNotFoundException(id));
     }
-
+    @Cacheable(value="vehicleHistory", key = "#id")
     public List<WorkOrder> getWorkOrdersById(Long id) {
         return workOrderRepository.findWorkOrdersByVehicle_Id(id);
     }
