@@ -50,9 +50,10 @@ public class WorkOrderService {
 
     }
 
-    public WorkOrder getWorkOrderWithServiceItems(Long id) {
-        return workOrderRepository.findWithServiceItemsById(id).orElseThrow(()->
-                new WorkOrderNotFoundException(id));
+    public WorkOrderResponseDTO getWorkOrderWithServiceItems(Long id) {
+        WorkOrder workOrder = workOrderRepository.findWithServiceItemsById(id)
+                .orElseThrow(() -> new WorkOrderNotFoundException(id));
+        return mapToDTO(workOrder);
     }
 
     public void assignMechanic(Long id, @Valid WorkOrderPatchDTO dto) {
@@ -126,5 +127,33 @@ public class WorkOrderService {
         }
 
         workOrderRepository.save(workOrder);
+    }
+
+
+    private WorkOrderResponseDTO mapToDTO(WorkOrder workOrder) {
+        WorkOrderResponseDTO dto = new WorkOrderResponseDTO();
+        dto.setId(workOrder.getId());
+        dto.setStatus(workOrder.getStatus());
+        dto.setNotes(workOrder.getNotes());
+        dto.setCreatedAt(workOrder.getCreatedAt());
+        dto.setCompletedAt(workOrder.getCompletedAt());
+        // map vehicle fields
+        dto.setVehicleId(workOrder.getVehicle().getId());
+        dto.setVehicleMake(workOrder.getVehicle().getMake());
+        dto.setVehicleModel(workOrder.getVehicle().getModel());
+        dto.setVehicleYear(workOrder.getVehicle().getYear());
+        dto.setLicensePlate(workOrder.getVehicle().getLicensePlate());
+
+        dto.setCustomerId(workOrder.getVehicle().getCustomer().getId());
+        dto.setCustomerName(workOrder.getVehicle().getCustomer().getName());
+
+        if (workOrder.getMechanic() != null) {
+            dto.setMechanicId(workOrder.getMechanic().getId());
+            dto.setMechanicName(workOrder.getMechanic().getName());
+        }
+
+        dto.setServiceItemList(workOrder.getServiceItemList());
+
+        return dto;
     }
 }

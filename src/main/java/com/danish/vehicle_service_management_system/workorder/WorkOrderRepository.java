@@ -12,10 +12,10 @@ import java.util.Optional;
 public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
     List<WorkOrder> findWorkOrdersByMechanicAndStatusNot(Mechanic mechanic, WorkOrderStatus status);
 
-    
 
 
-    @EntityGraph(attributePaths = {"serviceItemList"})
+
+    @EntityGraph(attributePaths = {"serviceItemList", "vehicle", "vehicle.customer", "mechanic"})
     Optional<WorkOrder> findWithServiceItemsById(Long id);
 
     @Query("SELECT w FROM WorkOrder w JOIN FETCH w.serviceItemList WHERE w.vehicle.id = :vehicleId")

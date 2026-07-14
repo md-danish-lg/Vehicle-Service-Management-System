@@ -24,7 +24,7 @@ public class WorkOrderController {
 
 
     @GetMapping("{id}")
-    public WorkOrder getFullWorkOrder(@PathVariable Long id){
+    public WorkOrderResponseDTO getFullWorkOrder(@PathVariable Long id){
         return workOrderService.getWorkOrderWithServiceItems(id);
 
     }
